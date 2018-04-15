@@ -1,20 +1,20 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="./add-payment-modal.html">
 
 <dom-module id="payment-management-app">
   <template>
     <style>
       :host {
         display: block;
+        font-family: 'Open Sans', sans-serif;
       }
     </style>
+
     <h2>Hello [[prop1]]!</h2>
+    <add-payment-modal></add-payment-modal>
   </template>
 
   <script>
-    /**
-     * @customElement
-     * @polymer
-     */
     class PaymentManagementApp extends Polymer.Element {
       static get is() { return 'payment-management-app'; }
       static get properties() {
