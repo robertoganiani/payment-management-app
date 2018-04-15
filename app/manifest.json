@@ -1,0 +1,6 @@
+{
+  "name": "payment-management-app",
+  "short_name": "payment-management-app",
+  "start_url": "/",
+  "display": "standalone"
+}

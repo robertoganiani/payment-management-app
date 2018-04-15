@@ -1,0 +1,18 @@
+{
+  "name": "payment-management-app",
+  "version": "1.0.0",
+  "description": "Payment management app",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "build": "cd app && polymer build "
+  },
+  "author": "Robert Oganiani",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
