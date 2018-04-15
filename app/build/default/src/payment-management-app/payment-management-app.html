@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="payment-management-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class PaymentManagementApp extends Polymer.Element {
+      static get is() { return 'payment-management-app'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'payment-management-app'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(PaymentManagementApp.is, PaymentManagementApp);
+  </script>
+</dom-module>
