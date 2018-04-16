@@ -7,7 +7,7 @@
         background-color: #fff;
         min-height: 85px;
         max-width: 1170px;
-        margin: 85px auto 10px auto;
+        margin: 85px auto 5px auto;
         display: grid;
         grid-auto-flow: column;
         justify-content: space-between;
@@ -54,6 +54,11 @@
         width: 160px;
       }
 
+      .filter-input:focus,
+      .extended-filters-btn:focus {
+        outline: 0;
+      }
+
       .filter-input::placeholder {
         color: #9ba5b2;
       }
@@ -80,6 +85,13 @@
         height: 30px;
         border-radius: 20px;
         cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .extended-filters-btn:active {
+        background-color: #a1c4ff;
       }
 
       @media only screen and (max-width: 600px) {
@@ -120,7 +132,7 @@
           <input class="filter-input" type="text" placeholder="filter by any property...">
         </div>
         <div class="extended-filters">
-          <button class="extended-filters-btn">extended filters</button>
+          <span class="extended-filters-btn">extended filters</span>
         </div>
       </div>
     </div>
