@@ -1,0 +1,148 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="extended-filters">
+  <template>
+    <style>
+      :host {
+        --main-blue: #a1c4ff;
+        --main-white: #fff;
+      }
+
+      .wrapper {
+        max-width: 1170px;
+        margin: 0 auto 25px auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        background-color: var(--main-white);
+        min-height: 195px;
+        max-width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .arrow-up {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid var(--main-white);
+        align-self: flex-end;
+        margin-right: 25px;
+      }
+
+      .filter-by-category {
+        padding-left: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        height: 165px;
+      }
+
+      .filter-title {
+        color: #9ba5b2;
+        font-size: 13px;
+      }
+
+      .category-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .category-item {
+        color: var(--main-blue);
+        border: 1px solid var(--main-blue);
+        height: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-size: 13px;
+        margin: 0 10px 20px 0;
+        cursor: pointer;
+      }
+
+      .active-item {
+        color: var(--main-white);
+        background-color: var(--main-blue)
+      }
+
+      .filter {
+        display: flex;
+        flex-direction: column;
+        height: 160px;
+        border-left: 1px solid #dee0e3;
+        padding: 0 45px 0 45px;
+      }
+
+      .input {
+        padding: 10px;
+        margin-bottom: 10px;
+        width: 275px;
+        border: 1px solid #c5c6c6;
+        border-radius: 3px;
+        font-size: 13px;
+        box-sizing: border-box;
+      }
+
+      .input::placeholder {
+        color: #9ba5b2;
+      }
+
+      @media only screen and (max-width: 1175px) {
+        .container {
+          grid-auto-flow: row;
+          justify-content: center;
+        }
+        .filter {
+          border: none;
+          align-items: center;
+          padding: 0;
+        }
+        .filter-by-category {
+          align-items: center;
+        }
+      }
+    </style>
+
+    <div class="wrapper">
+      <div class="arrow-up"></div>
+      <div class="container">
+        <div class="filter-by-category">
+          <p class="filter-title">filter by category</p>
+          <div class="category-container">
+            <span class="category-item">mobile service</span>
+            <span class="category-item active-item">gasoline</span>
+            <span class="category-item">food</span>
+            <span class="category-item">charity</span>
+            <span class="category-item">transport</span>
+          </div>
+        </div>
+        <div class="filter filter-by-date">
+          <p class="filter-title">filter by date</p>
+          <input class="input" placeholder="from" type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
+          <input class="input" placeholder="to" type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
+        </div>
+        <div class="filter filter-by-amount">
+          <p class="filter-title">filter by amount</p>
+          <input class="input" placeholder="from" type="number">
+          <input class="input" placeholder="to" type="number">
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class ExtendedFilters extends Polymer.Element {
+      static get is() { return 'extended-filters'; }
+    }
+
+    window.customElements.define(ExtendedFilters.is, ExtendedFilters);
+  </script>
+</dom-module>

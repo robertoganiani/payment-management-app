@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="app-header">
+  <template>
+    <style>
+      .container {
+        background-color: #fff;
+        height: 55px;
+        width: 100%;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+        position: fixed;
+        top: 0;
+      }
+
+      .inner-container {
+        max-width: 1170px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-content: center;
+      }
+
+      .logo-container {
+        display: flex;
+        font-size: 16px;
+        color: #9abcf6;
+      }
+
+      .logo {
+        width: 90px;
+        height: 55px;
+        margin-right: 20px;
+      }
+
+      .logo-text-bold {
+        font-weight: bold;
+        color: #779cdb;
+      }
+
+      .greeting-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .greeting {
+        font-size: 13px;
+        color: #9ba5b2;
+      }
+    </style>
+
+    <div class="container">
+      <div class="inner-container">
+        <div class="logo-container">
+          <img class="logo" src="../../assets/images/logo.png" alt="logo">
+          <p>
+            some
+            <span class="logo-text-bold">logo</span>
+          </p>
+        </div>
+        <div class="greeting-container">
+          <p class="greeting">hello user</p>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class AppHeader extends Polymer.Element {
+      static get is() { return 'app-header'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'app-header'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(AppHeader.is, AppHeader);
+  </script>
+</dom-module>

@@ -1,0 +1,169 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="add-payment-modal">
+  <template>
+    <style>
+      :host {
+        --blue-color: #a1c4ff;
+        --white-color: #fff;
+      }
+
+      .container {
+        background: rgba(0, 0, 0, .5);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+      }
+
+      .payment-form {
+        background-color: var(--white-color);
+        width: 450px;
+        height: 520px;
+        margin-top: 10%;
+      }
+
+      .modal-header {
+        color: #8194a8;
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 10px 0 10px;
+      }
+
+      .modal-title {
+        font-size: 13px;
+      }
+
+      .close-btn {
+        cursor: pointer;
+      }
+
+      .modal-body {
+        margin: 0 40px 0 40px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .double-input {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .title {
+        flex: 2;
+        margin-right: 20px;
+      }
+
+      .amount {
+        flex: 1;
+      }
+
+      label {
+        font-size: 12px;
+        color: var(--blue-color);
+      }
+
+      input,
+      select,
+      textarea {
+        height: 40px;
+        font-size: 15px;
+        border: 1px solid #c5c6c6;
+        border-radius: 3px;
+        width: 100%;
+        margin-top: 5px;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border: 1px solid var(--blue-color);
+      }
+
+      .input-container {
+        margin-top: 20px;
+      }
+
+      #comment {
+        height: 70px;
+      }
+
+      .create-btn {
+        align-self: flex-end;
+        color: var(--white-color);
+        background-color: var(--blue-color);
+        border-radius: 3px;
+        height: 35px;
+        width: 100px;
+        margin-top: 30px;
+        font-size: 13px;
+      }
+    </style>
+
+    <div class="container">
+      <form class="payment-form">
+        <div class="modal-header">
+          <span class="modal-title">ADD NEW PAYMENT</span>
+          <span class="close-btn">X</span>
+        </div>
+        <div class="modal-body">
+          <div class="double-input input-container">
+            <div class="title">
+              <label for="title">Title:</label>
+              <br>
+              <input required="" type="text" id="title">
+            </div>
+            <div class="amount">
+              <label for="amount">Amount:</label>
+              <br>
+              <input required="" type="number" id="amount">
+            </div>
+          </div>
+          <div class="input-container">
+            <label for="category">Category:</label>
+            <br>
+            <select required="" id="category">
+              <option value="" disabled="" selected=""></option>
+              <option value="mobile service">mobile service</option>
+              <option value="gasoline">gasoline</option>
+              <option value="food">food</option>
+              <option value="charity">charity</option>
+              <option value="transport">transport</option>
+            </select>
+          </div>
+          <div class="input-container">
+            <label for="date">Date:</label>
+            <br>
+            <input required="" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date">
+          </div>
+          <div class="comment input-container">
+            <label for="comment">Comment:</label>
+            <br>
+            <textarea required="" id="comment" cols="40" rows="10"></textarea>
+          </div>
+          <button class="create-btn">CREATE</button>
+        </div>
+      </form>
+    </div>
+  </template>
+
+  <script>
+    class AddPaymentModal extends Polymer.Element {
+      static get is() { return 'add-payment-modal'; }
+      static get properties() {
+        return {
+          title: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+    }
+
+    window.customElements.define(AddPaymentModal.is, AddPaymentModal);
+  </script>
+</dom-module>
