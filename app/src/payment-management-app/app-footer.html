@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="app-footer">
+  <template>
+    <style>
+      .container {
+        background-color: #fff;
+        height: 100px;
+        width: 100%;
+        font-size: 13px;
+        color: #9ba5b2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+
+    <div class="container">
+     <span>2017</span>
+     <span>payment management</span>
+    </div>
+  </template>
+
+  <script>
+    class AppFooter extends Polymer.Element {
+      static get is() { return 'app-footer'; }
+    }
+
+    window.customElements.define(AppFooter.is, AppFooter);
+  </script>
+</dom-module>
