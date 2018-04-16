@@ -1,0 +1,136 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="add-filter-payment">
+  <template>
+    <style>
+      .container {
+        background-color: #fff;
+        min-height: 85px;
+        max-width: 1170px;
+        margin: 85px auto 10px auto;
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .add-payment {
+        min-width: 170px;
+        height: 65px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding-left: 25px;
+        border-right: 1px solid #dee0e3;
+        font-size: 11px;
+        color: #a1c4ff;
+      }
+
+      .add-payment-icon {
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .right-content {
+        display: flex;
+        width: 390px;
+      }
+
+      .filter-by {
+        box-sizing: border-box;
+        width: 220px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 65px;
+        border-left: 1px solid #dee0e3;
+        border-right: 1px solid #dee0e3;
+      }
+
+      .filter-input {
+        border: none;
+        font-size: 13px;
+        width: 160px;
+      }
+
+      .filter-input::placeholder {
+        color: #9ba5b2;
+      }
+
+      .filter-icon {
+        padding: 0 10px 0 20px;
+      }
+
+      .extended-filters {
+        box-sizing: border-box;
+        width: 170px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .extended-filters-btn {
+        color: #fff;
+        background-color: #a7bedb;
+        border: none;
+        font-size: 13px;
+        width: 130px;
+        min-width: 90px;
+        height: 30px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .container {
+          grid-auto-flow: row;
+          justify-content: center;
+        }
+        .add-payment {
+          width: 100%;
+          justify-content: center;
+          border: none;
+        }
+        .filter-by {
+          border-left: none;
+          width: auto;
+          flex: 1;
+        }
+        .extended-filters {
+          flex: 1;
+          width: auto;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        .right-content {
+          width: auto;
+        }
+      }
+    </style>
+
+    <div class="container">
+      <div class="add-payment">
+        <img class="add-payment-icon" src="../../assets/images/add.png" alt="add payment">
+        <span>ADD PAYMENT</span>
+      </div>
+      <div class="right-content">
+        <div class="filter-by">
+          <img class="filter-icon" src="../../assets/images/filter.png" alt="filter">
+          <input class="filter-input" type="text" placeholder="filter by any property...">
+        </div>
+        <div class="extended-filters">
+          <button class="extended-filters-btn">extended filters</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class AddFilterPayment extends Polymer.Element {
+      static get is() { return 'add-filter-payment'; }
+    }
+
+    window.customElements.define(AddFilterPayment.is, AddFilterPayment);
+  </script>
+</dom-module>
