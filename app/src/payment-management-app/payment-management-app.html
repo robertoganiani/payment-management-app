@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 
 <link rel="import" href="./add-payment-modal.html">
 <link rel="import" href="./app-header.html">
@@ -6,6 +7,7 @@
 <link rel="import" href="./add-filter-payment.html">
 <link rel="import" href="./extended-filters.html">
 <link rel="import" href="./filter-results.html">
+<link rel="import" href="./login-register.html">
 
 <dom-module id="payment-management-app">
   <template>
@@ -13,7 +15,7 @@
       :host {
         font-family: 'Open Sans', sans-serif;
         width: 100%;
-        height: 100%;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -24,16 +26,23 @@
       }
     </style>
 
-    <!-- <add-payment-modal></add-payment-modal> -->
-    <div>
+    <template is="dom-if" if="{{isModalVisible}}">
+      <add-payment-modal is-modal-visible="{{isModalVisible}}"></add-payment-modal>
+    </template>
+
+    <template is="dom-if" if="{{!isLoggedIn}}">
+      <login-register></login-register>
+    </template>
+
+    <template is="dom-if" if="{{isLoggedIn}}">
       <app-header></app-header>
-      <add-filter-payment></add-filter-payment>
+      <add-filter-payment is-modal-visible="{{isModalVisible}}"></add-filter-payment>
       <extended-filters></extended-filters>
       <filter-results></filter-results>
-    </div>
-    <div class="sticky-footer">
-      <app-footer></app-footer>
-    </div>
+      <div class="sticky-footer">
+        <app-footer></app-footer>
+      </div>
+    </template>
   </template>
 
   <script>
@@ -41,9 +50,13 @@
       static get is() { return 'payment-management-app'; }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'payment-management-app'
+          isModalVisible: {
+            type: Boolean,
+            value: false
+          },
+          isLoggedIn: {
+            type: Boolean,
+            value: false
           }
         };
       }

@@ -134,7 +134,7 @@
 
     <div class="container">
       <div class="add-payment">
-        <img class="add-payment-icon" src="../../images/add.png" alt="add payment">
+        <img on-click="showModal" class="add-payment-icon" src="../../images/add.png" alt="add payment">
         <span>ADD PAYMENT</span>
       </div>
       <div class="right-content">
@@ -152,6 +152,19 @@
   <script>
     class AddFilterPayment extends Polymer.Element {
       static get is() { return 'add-filter-payment'; }
+      static get properties() {
+        return {
+          isModalVisible: {
+            type: Boolean,
+            value: true,
+            notify: true
+          }
+        }
+      }
+
+      showModal() {
+        this.isModalVisible = true
+      }
     }
 
     window.customElements.define(AddFilterPayment.is, AddFilterPayment);

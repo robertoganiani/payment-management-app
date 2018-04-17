@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="login-register">
+  <template>
+    <style>
+      .container {
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        height: 100vh;
+      }
+
+      input {
+        height: 40px;
+        font-size: 15px;
+        border: 1px solid #c5c6c6;
+        border-radius: 3px;
+        width: 100%;
+        margin-top: 5px;
+      }
+    </style>
+
+    <div class="container">
+      <input placeholder="username" type="text">
+      <input placeholder="password" type="password">
+    </div>
+  </template>
+
+  <script>
+    class LoginRegister extends Polymer.Element {
+      static get is() { return 'login-register'; }
+      static get properties() {
+        return {
+
+        }
+      }
+    }
+
+    window.customElements.define(LoginRegister.is, LoginRegister);
+  </script>
+</dom-module>

@@ -108,7 +108,7 @@
       <form class="payment-form">
         <div class="modal-header">
           <span class="modal-title">ADD NEW PAYMENT</span>
-          <span class="close-btn">X</span>
+          <span on-click="hideModal" class="close-btn">X</span>
         </div>
         <div class="modal-body">
           <div class="double-input input-container">
@@ -156,11 +156,20 @@
       static get is() { return 'add-payment-modal'; }
       static get properties() {
         return {
-          title: {
+          name: {
             type: String,
-            value: ''
+            value: 'Rob'
+          },
+          isModalVisible: {
+            type: Boolean,
+            value: true,
+            notify: true
           }
         };
+      }
+
+      hideModal() {
+        this.isModalVisible = false
       }
     }
 
