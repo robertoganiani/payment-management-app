@@ -1,5 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="./payment-row-item.html">
+<link rel="import" href="./payment-charts.html">
+
 <dom-module id="filter-results">
   <template>
     <style>
@@ -11,13 +14,14 @@
       }
 
       .container {
-        background-color: #fff;
+        background-color: transparent;
         min-height: 100px;
         max-width: 100%;
         display: grid;
         grid-auto-flow: column;
+        grid-template-columns: 1.3fr 1fr;
+        grid-column-gap: 20px;
         justify-content: space-between;
-        align-items: center;
       }
 
       .records-count {
@@ -26,12 +30,52 @@
         margin-bottom: 15px;
       }
 
-      @media only screen and (max-width: 600px) {}
+      .payment-total {
+        height: 75px;
+        background-color: #a1c4ff;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        padding-right: 20px;
+        color: #fff;
+      }
+
+      .payment-total-title {
+        font-size: 13px;
+      }
+
+      .payment-total-amount {
+        font-size: 27px;
+      }
+
+      @media only screen and (max-width: 750px) {
+        .wrapper {
+          align-items: center;
+        }
+        .container {
+          grid-template-columns: auto;
+          grid-template-rows: repeat(2, auto);
+          grid-row-gap: 20px;
+        }
+      }
     </style>
 
     <div class="wrapper">
       <span class="records-count">4 records found</span>
       <div class="container">
+        <div class="payment-list">
+          <payment-row-item></payment-row-item>
+          <payment-row-item></payment-row-item>
+          <payment-row-item></payment-row-item>
+          <div class="payment-total">
+            <span class="payment-total-title">Total:</span>
+            <span class="payment-total-amount">83.60</span>
+          </div>
+        </div>
+        <div class="payment-charts">
+          <payment-charts></payment-charts>
+        </div>
       </div>
     </div>
   </template>

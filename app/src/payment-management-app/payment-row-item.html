@@ -1,0 +1,109 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="payment-row-item">
+  <template>
+    <style>
+      :host {
+        --main-blue: #a1c4ff;
+        --main-white: #f9fafb;
+        --main-red: #f85776;
+        --main-gray: #4e6985;
+        --with-comment: #f3f4f8;
+        --small-font: 13px;
+      }
+
+      .container {
+        background-color: var(--main-white);
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 20px 15px 20px 25px;
+        border-bottom: 1px solid #dee0e3;
+      }
+
+      .category {
+        color: var(--main-blue);
+        border: 1px solid var(--main-blue);
+        height: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+        padding: 10px 10px;
+        font-size: var(--small-font);
+        margin-top: 10px;
+      }
+
+      .row {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .row-left {
+        align-items: flex-start;
+      }
+
+      .row-right {
+        align-items: flex-end;
+        text-align: end;
+      }
+
+      .title {
+        font-size: 19px;
+        color: var(--main-gray);
+      }
+
+      .payment-small-text {
+        color: #aaaaaa;
+        font-size: var(--small-font);
+      }
+
+      .payment-amount {
+        font-size: 22px;
+        color: var(--main-red);
+      }
+
+      .payment-currency {
+        font-size: var(--small-font);
+        color: var(--main-red);
+      }
+
+      .payment-comment {
+        color: var(--main-gray);
+        font-size: 14px;
+        margin-top: 40px;
+      }
+    </style>
+
+    <div class="container">
+      <div class="row row-left">
+        <span class="title">my payment title</span>
+        <span class="category">gasoline</span>
+        <span class="payment-comment">comment:</span>
+        <span class="payment-small-text">my very simple comment for this payment here</span>
+      </div>
+      <div class="row row-right">
+        <span class="payment-small-text">on Thursday, 15 April 2017</span>
+        <span class="payment-amount">-40.00</span>
+        <span class="payment-currency">GEL</span>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class PaymentRowItem extends Polymer.Element {
+      static get is() { return 'payment-row-item'; }
+      static get properties() {
+        return {
+          title: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+    }
+
+    window.customElements.define(PaymentRowItem.is, PaymentRowItem);
+  </script>
+</dom-module>
