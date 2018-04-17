@@ -5,6 +5,7 @@
 <link rel="import" href="./app-footer.html">
 <link rel="import" href="./add-filter-payment.html">
 <link rel="import" href="./extended-filters.html">
+<link rel="import" href="./filter-results.html">
 
 <dom-module id="payment-management-app">
   <template>
@@ -12,14 +13,26 @@
       :host {
         font-family: 'Open Sans', sans-serif;
         width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sticky-footer {
+        flex-shrink: 0;
       }
     </style>
 
     <!-- <add-payment-modal></add-payment-modal> -->
-    <app-header></app-header>
-    <add-filter-payment></add-filter-payment>
-    <extended-filters></extended-filters>
-    <app-footer></app-footer>
+    <div>
+      <app-header></app-header>
+      <add-filter-payment></add-filter-payment>
+      <extended-filters></extended-filters>
+      <filter-results></filter-results>
+    </div>
+    <div class="sticky-footer">
+      <app-footer></app-footer>
+    </div>
   </template>
 
   <script>
