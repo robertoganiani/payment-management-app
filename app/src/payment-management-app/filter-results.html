@@ -1,0 +1,46 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="filter-results">
+  <template>
+    <style>
+      .wrapper {
+        max-width: 1170px;
+        margin: 20px auto 0 auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        background-color: #fff;
+        min-height: 100px;
+        max-width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .records-count {
+        font-size: 26px;
+        color: #4e6985;
+        margin-bottom: 15px;
+      }
+
+      @media only screen and (max-width: 600px) {}
+    </style>
+
+    <div class="wrapper">
+      <span class="records-count">4 records found</span>
+      <div class="container">
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class FilterResults extends Polymer.Element {
+      static get is() { return 'filter-results'; }
+    }
+
+    window.customElements.define(FilterResults.is, FilterResults);
+  </script>
+</dom-module>
