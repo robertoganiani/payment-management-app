@@ -49,6 +49,11 @@
         font-size: 27px;
       }
 
+      .payment-list {
+        max-height: 550px;
+        overflow: scroll;
+      }
+
       @media only screen and (max-width: 750px) {
         .wrapper {
           align-items: center;
@@ -64,10 +69,14 @@
     <div class="wrapper">
       <span class="records-count">4 records found</span>
       <div class="container">
-        <div class="payment-list">
-          <payment-row-item></payment-row-item>
-          <payment-row-item></payment-row-item>
-          <payment-row-item></payment-row-item>
+        <div>
+          <div class="payment-list">
+            <payment-row-item></payment-row-item>
+            <payment-row-item></payment-row-item>
+            <payment-row-item></payment-row-item>
+            <payment-row-item></payment-row-item>
+            <payment-row-item></payment-row-item>
+          </div>
           <div class="payment-total">
             <span class="payment-total-title">Total:</span>
             <span class="payment-total-amount">83.60</span>
