@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="login-register">
   <template>
@@ -39,14 +40,10 @@
         border-radius: 3px;
       }
 
-      .register-btn {
+      .signin-btn {
         background: var(--main-blue);
         color: #fff;
-      }
-
-      .login-btn {
-        background: var(--main-blue);
-        color: #fff;
+        font-size: 15px;
       }
     </style>
 
@@ -55,11 +52,11 @@
       <form>
         <input required type='text' id='username' placeholder='Username'>
         <input required type='password' id='password' placeholder='Password'>
+        <div class="btns">
+          <button on-click="signin" class='btn signin-btn'>Log In / Sign Up</button>
+        </div>
       </form>
-      <div class="btns">
-        <button class='btn register-btn'>Sign Up</button>
-        <button class='btn login-btn'>Log In</button>
-      </div>
+      <paper-toast id="toast" text="Wrong password"></paper-toast>
     </div>
   </template>
 
@@ -68,8 +65,42 @@
       static get is() { return 'login-register'; }
       static get properties() {
         return {
-
+          isLoggedIn: {
+            type: Boolean,
+            value: false,
+            notify: true
+          }
         }
+      }
+
+      constructor() {
+        super()
+      }
+
+      signin(e) {
+        e.preventDefault()
+
+        const username = this.$.username.value
+        const password = this.$.password.value
+
+        fetch('http://localhost:8000/signin', {
+          method: 'POST',
+          body: JSON.stringify({ username, password }),
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          })
+        }).then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            if (response.token) {
+              localStorage.setItem('token', response.token)
+              this.isLoggedIn = true
+              this.$.username.value = ''
+              this.$.password.value = ''
+              return
+            }
+            this.$.toast.open()
+          })
       }
     }
 

@@ -43,13 +43,22 @@
 
       .greeting-container {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: space-evenly;
+        padding-right: 5px;
       }
 
       .greeting {
         font-size: 13px;
         color: #9ba5b2;
+        margin: 0;
+      }
+
+      .logout {
+        background-color: #779cdb;
+        color: #fff;
+        border-radius: 10px;
       }
     </style>
 
@@ -64,6 +73,7 @@
         </div>
         <div class="greeting-container">
           <p class="greeting">hello user</p>
+          <button on-click="logout" class="logout">Log Out</button>
         </div>
       </div>
     </div>
@@ -74,11 +84,17 @@
       static get is() { return 'app-header'; }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'app-header'
+          isLoggedIn: {
+            type: Boolean,
+            value: false,
+            notify: true
           }
-        };
+        }
+      }
+
+      logout() {
+        localStorage.removeItem('token')
+        this.isLoggedIn = false
       }
     }
 

@@ -31,11 +31,11 @@
     </template>
 
     <template is="dom-if" if="{{!isLoggedIn}}">
-      <login-register></login-register>
+      <login-register is-logged-in="{{isLoggedIn}}"></login-register>
     </template>
 
     <template is="dom-if" if="{{isLoggedIn}}">
-      <app-header></app-header>
+      <app-header is-logged-in="{{isLoggedIn}}"></app-header>
       <add-filter-payment is-modal-visible="{{isModalVisible}}"></add-filter-payment>
       <extended-filters></extended-filters>
       <filter-results></filter-results>
@@ -58,7 +58,13 @@
             type: Boolean,
             value: false
           }
-        };
+        }
+      }
+      ready() {
+        super.ready()
+        if (localStorage.getItem('token')) {
+          this.isLoggedIn = true
+        }
       }
     }
 
