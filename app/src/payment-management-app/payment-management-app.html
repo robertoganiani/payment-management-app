@@ -47,7 +47,7 @@
 
   <script>
     class PaymentManagementApp extends Polymer.Element {
-      static get is() { return 'payment-management-app'; }
+      static get is() { return 'payment-management-app' }
       static get properties() {
         return {
           isModalVisible: {
@@ -60,6 +60,7 @@
           }
         }
       }
+
       ready() {
         super.ready()
         if (localStorage.getItem('token')) {
@@ -68,6 +69,6 @@
       }
     }
 
-    window.customElements.define(PaymentManagementApp.is, PaymentManagementApp);
+    window.customElements.define(PaymentManagementApp.is, PaymentManagementApp)
   </script>
 </dom-module>

@@ -94,6 +94,7 @@
           .then(response => {
             if (response.token) {
               localStorage.setItem('token', response.token)
+              localStorage.setItem('username', username)
               this.isLoggedIn = true
               this.$.username.value = ''
               this.$.password.value = ''

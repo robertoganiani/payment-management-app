@@ -145,7 +145,7 @@
             <br>
             <textarea required id="comment" cols="40" rows="10"></textarea>
           </div>
-          <button class="create-btn">CREATE</button>
+          <button on-click="addPayment" class="create-btn">CREATE</button>
         </div>
       </form>
     </div>
@@ -153,7 +153,7 @@
 
   <script>
     class AddPaymentModal extends Polymer.Element {
-      static get is() { return 'add-payment-modal'; }
+      static get is() { return 'add-payment-modal' }
       static get properties() {
         return {
           name: {
@@ -165,7 +165,40 @@
             value: true,
             notify: true
           }
-        };
+        }
+      }
+
+      addPayment(e) {
+        e.preventDefault()
+
+        const token = localStorage.getItem('token')
+        const username = localStorage.getItem('username')
+        const title = this.$.title.value
+        const amount = this.$.amount.value
+        const category = this.$.category.value
+        const date = this.$.date.value
+        const comment = this.$.comment.value
+
+        const payment = { title, amount, category, date, comment }
+
+        fetch('http://localhost:8000/add-payment', {
+          method: 'POST',
+          body: JSON.stringify({ username, payment }),
+          headers: new Headers({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          })
+        }).then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            console.log('===>>response<<===', response)
+            this.$.title.value = ''
+            this.$.amount.value = ''
+            this.$.category.value = ''
+            this.$.date.value = ''
+            this.$.comment.value = ''
+            this.isModalVisible = false
+          })
       }
 
       hideModal() {
@@ -173,6 +206,6 @@
       }
     }
 
-    window.customElements.define(AddPaymentModal.is, AddPaymentModal);
+    window.customElements.define(AddPaymentModal.is, AddPaymentModal)
   </script>
 </dom-module>
