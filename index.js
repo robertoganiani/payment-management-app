@@ -4,6 +4,9 @@ const expressJWT = require('express-jwt')
 const path = require('path')
 const mongoose = require('mongoose')
 
+require('./models/User')
+require('./models/Payment')
+
 const config = require('./config')
 const routes = require('./routes/index')
 
@@ -17,15 +20,16 @@ mongoose.connection
   .once('open', () => console.log('Connected to MongoLab'))
   .on('error', error => console.log('Error connecting to MongoLab: ', error))
 
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'app')))
 // app.use(express.static(`${__dirname}/app/build/default`))
-// app.use(
-//   expressJWT({ secret: config.jwtSecret }).unless({
-//     path: ['/signin']
-//   })
-// )
+app.use(
+  expressJWT({ secret: config.jwtSecret }).unless({
+    path: ['/signin']
+  })
+)
 
 app.get('/', (req, res) => {
   res.sendFile('index.html', { root: '.' })

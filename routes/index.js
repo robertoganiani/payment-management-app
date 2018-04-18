@@ -6,8 +6,8 @@ const paymentsController = require('../controllers/paymentsController')
 
 router.post('/signin', authController.signin)
 
-router.get('/payments/:id', paymentsController.getUserPayments)
+router.get('/payments/:username', paymentsController.getUserPayments)
 
-router.post('/add-payment/:id', paymentsController.addPayment)
+router.post('/add-payment/:username', paymentsController.addPayment)
 
 module.exports = router
