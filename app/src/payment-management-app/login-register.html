@@ -3,26 +3,62 @@
 <dom-module id="login-register">
   <template>
     <style>
+      :host {
+        --main-blue: #a1c4ff;
+      }
       .container {
         display: grid;
         justify-content: center;
         align-content: center;
-        height: 100vh;
+        height: 100vh;;
+        font-size: 60px;
+        color: #888;
+        margin: 0 auto;
+        text-align: center;
       }
 
       input {
-        height: 40px;
-        font-size: 15px;
-        border: 1px solid #c5c6c6;
+        border: 0;
+        border-bottom: 3px solid var(--main-blue);
+        max-width: 250px;
+        height: 35px;
+        font-size: 25px;
         border-radius: 3px;
-        width: 100%;
-        margin-top: 5px;
+      }
+
+      input::placeholder {
+        padding: 0 15px;
+        color: #dee0e3;
+      }
+
+      .btn {
+        margin-top: 50px;
+        border: 0;
+        padding: 15px;
+        border-radius: 3px;
+      }
+
+      .register-btn {
+        background: var(--main-blue);
+        color: #fff;
+      }
+
+      .login-btn {
+        background: var(--main-blue);
+        color: #fff;
       }
     </style>
 
-    <div class="container">
-      <input placeholder="username" type="text">
-      <input placeholder="password" type="password">
+    <div class='container'>
+      Login / Signup
+      <form>
+        <input type='text' id='username' placeholder='Username'>
+        <input type='password' id='password' placeholder='Password'>
+      </form>
+      <div class="btns">
+        <button class='btn register-btn'>Sign Up</button>
+        <button class='btn login-btn'>Log In</button>
+      </div>
     </div>
   </template>
 
