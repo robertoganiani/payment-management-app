@@ -8,6 +8,6 @@ router.post('/signin', authController.signin)
 
 router.get('/payments/:username', paymentsController.getUserPayments)
 
-router.post('/add-payment/:username', paymentsController.addPayment)
+router.post('/add-payment', paymentsController.addPayment)
 
 module.exports = router

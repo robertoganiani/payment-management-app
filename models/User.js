@@ -13,7 +13,7 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  payments: [{ type: mongoose.Schema.ObjectId, ref: 'Payment' }]
+  payments: []
 })
 
 // hash user password before saving to DB
