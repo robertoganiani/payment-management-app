@@ -20,7 +20,6 @@ mongoose.connection
   .once('open', () => console.log('Connected to MongoLab'))
   .on('error', error => console.log('Error connecting to MongoLab: ', error))
 
-
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, 'app')))
