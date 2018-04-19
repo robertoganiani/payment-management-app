@@ -39,7 +39,7 @@
       <add-filter-payment is-modal-visible="{{isModalVisible}}" is-filters-visible="{{isFiltersVisible}}"></add-filter-payment>
 
       <template is="dom-if" if="{{isFiltersVisible}}">
-        <extended-filters ></extended-filters>
+        <extended-filters></extended-filters>
       </template>
 
       <filter-results></filter-results>
@@ -66,6 +66,10 @@
           isLoggedIn: {
             type: Boolean,
             value: false
+          },
+          payments: {
+            type: Array,
+            value: []
           }
         }
       }
@@ -74,7 +78,26 @@
         super.ready()
         if (localStorage.getItem('token')) {
           this.isLoggedIn = true
+          this.getPayments()
         }
+      }
+
+      getPayments() {
+        const username = localStorage.getItem('username')
+        const token = localStorage.getItem('token')
+
+        fetch(`http://localhost:8000/payments/${username}`, {
+          method: 'GET',
+          headers: new Headers({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          })
+        })
+          .then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            this.payments = response.payments
+          })
       }
     }
 
