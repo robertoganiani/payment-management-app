@@ -42,7 +42,7 @@
         <extended-filters></extended-filters>
       </template>
 
-      <filter-results></filter-results>
+      <filter-results user-payments="{{payments}}"></filter-results>
       <div class="sticky-footer">
         <app-footer></app-footer>
       </div>
@@ -69,7 +69,8 @@
           },
           payments: {
             type: Array,
-            value: []
+            value: [],
+            notify: true
           }
         }
       }

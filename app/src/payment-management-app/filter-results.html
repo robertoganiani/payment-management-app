@@ -67,7 +67,7 @@
     </style>
 
     <div class="wrapper">
-      <span class="records-count">4 records found</span>
+      <span class="records-count">[[recordCount]] records found</span>
       <div class="container">
         <div>
           <div class="payment-list">
@@ -91,9 +91,30 @@
 
   <script>
     class FilterResults extends Polymer.Element {
-      static get is() { return 'filter-results'; }
+      static get is() { return 'filter-results' }
+      static get properties() {
+        return {
+          userPayments: {
+            type: Array,
+            value: []
+          },
+          recordCount: {
+            type: Number,
+            value: 0,
+            notify: true
+          }
+        }
+      }
+
+      async ready() {
+        super.ready()
+        // setTimeout(() => {
+        this.recordCount = this.userPayments.length
+        console.log('==>>userPayments<<==', this.userPayments)
+        // }, 500);
+      }
     }
 
-    window.customElements.define(FilterResults.is, FilterResults);
+    window.customElements.define(FilterResults.is, FilterResults)
   </script>
 </dom-module>
