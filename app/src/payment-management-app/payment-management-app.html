@@ -27,7 +27,7 @@
     </style>
 
     <template is="dom-if" if="{{isModalVisible}}">
-      <add-payment-modal is-modal-visible="{{isModalVisible}}"></add-payment-modal>
+      <add-payment-modal new-payment="{{newPayment}}" is-modal-visible="{{isModalVisible}}"></add-payment-modal>
     </template>
 
     <template is="dom-if" if="{{!isLoggedIn}}">
@@ -71,16 +71,29 @@
             type: Array,
             value: [],
             notify: true
+          },
+          newPayment: {
+            type: Object,
+            observer: 'pushNewPayment'
           }
         }
       }
 
+      static get observedAttributes() {
+        return ['newPayment']
+      }
+
       ready() {
         super.ready()
+
         if (localStorage.getItem('token')) {
           this.isLoggedIn = true
           this.getPayments()
         }
+      }
+
+      pushNewPayment(newValue, oldValue) {
+        this.unshift('userPayments', newValue)
       }
 
       getPayments() {
@@ -97,7 +110,7 @@
           .then(res => res.json())
           .catch(error => console.error('Error:', error))
           .then(response => {
-            this.set('userPayments', response.payments)
+            this.set('userPayments', response.payments.reverse())
           })
       }
     }

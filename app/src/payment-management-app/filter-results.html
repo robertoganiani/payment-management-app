@@ -93,22 +93,7 @@
       static get is() { return 'filter-results' }
       static get properties() {
         return {
-          userPayments: {
-            type: Array,
-            value: []
-          },
-          recordCount: {
-            type: Number,
-            value: 0,
-            notify: true
-          }
         }
-      }
-
-      ready() {
-        super.ready()
-        this.recordCount = this.userPayments.length
-        console.log('==>>userPayments<<==', this.userPayments)
       }
     }
 

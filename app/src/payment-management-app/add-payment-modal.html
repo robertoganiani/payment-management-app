@@ -156,13 +156,13 @@
       static get is() { return 'add-payment-modal' }
       static get properties() {
         return {
-          name: {
-            type: String,
-            value: 'Rob'
-          },
           isModalVisible: {
             type: Boolean,
             value: true,
+            notify: true
+          },
+          newPayment: {
+            type: Object,
             notify: true
           }
         }
@@ -180,6 +180,7 @@
         const comment = this.$.comment.value
 
         const payment = { title, amount, category, date, comment }
+        this.set('newPayment', payment)
 
         fetch('http://localhost:8000/add-payment', {
           method: 'POST',
@@ -191,7 +192,6 @@
         }).then(res => res.json())
           .catch(error => console.error('Error:', error))
           .then(response => {
-            console.log('===>>response<<===', response)
             this.$.title.value = ''
             this.$.amount.value = ''
             this.$.category.value = ''
