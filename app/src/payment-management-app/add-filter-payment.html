@@ -143,7 +143,7 @@
           <input class="filter-input" type="text" placeholder="filter by any property...">
         </div>
         <div class="extended-filters">
-          <span class="extended-filters-btn">extended filters</span>
+          <span on-click="showFilters" class="extended-filters-btn">extended filters</span>
         </div>
       </div>
     </div>
@@ -156,7 +156,12 @@
         return {
           isModalVisible: {
             type: Boolean,
-            value: true,
+            value: false,
+            notify: true
+          },
+          isFiltersVisible: {
+            type: Boolean,
+            value: false,
             notify: true
           }
         }
@@ -164,6 +169,10 @@
 
       showModal() {
         this.isModalVisible = true
+      }
+
+      showFilters() {
+        this.isFiltersVisible = !this.isFiltersVisible
       }
     }
 

@@ -58,6 +58,7 @@
       .logout {
         background-color: #779cdb;
         color: #fff;
+        border: none;
         border-radius: 10px;
       }
     </style>
@@ -94,6 +95,7 @@
 
       logout() {
         localStorage.removeItem('token')
+        localStorage.removeItem('username')
         this.isLoggedIn = false
       }
     }

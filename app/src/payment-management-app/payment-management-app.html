@@ -36,13 +36,18 @@
 
     <template is="dom-if" if="{{isLoggedIn}}">
       <app-header is-logged-in="{{isLoggedIn}}"></app-header>
-      <add-filter-payment is-modal-visible="{{isModalVisible}}"></add-filter-payment>
-      <extended-filters></extended-filters>
+      <add-filter-payment is-modal-visible="{{isModalVisible}}" is-filters-visible="{{isFiltersVisible}}"></add-filter-payment>
+
+      <template is="dom-if" if="{{isFiltersVisible}}">
+        <extended-filters ></extended-filters>
+      </template>
+
       <filter-results></filter-results>
       <div class="sticky-footer">
         <app-footer></app-footer>
       </div>
     </template>
+
   </template>
 
   <script>
@@ -51,6 +56,10 @@
       static get properties() {
         return {
           isModalVisible: {
+            type: Boolean,
+            value: false
+          },
+          isFiltersVisible: {
             type: Boolean,
             value: false
           },
