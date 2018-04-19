@@ -42,7 +42,7 @@
         <extended-filters></extended-filters>
       </template>
 
-      <filter-results user-payments="{{payments}}"></filter-results>
+      <filter-results user-payments="[[userPayments]]"></filter-results>
       <div class="sticky-footer">
         <app-footer></app-footer>
       </div>
@@ -67,7 +67,7 @@
             type: Boolean,
             value: false
           },
-          payments: {
+          userPayments: {
             type: Array,
             value: [],
             notify: true
@@ -97,7 +97,7 @@
           .then(res => res.json())
           .catch(error => console.error('Error:', error))
           .then(response => {
-            this.payments = response.payments
+            this.set('userPayments', response.payments)
           })
       }
     }

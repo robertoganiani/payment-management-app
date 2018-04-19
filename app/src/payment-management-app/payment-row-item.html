@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/moment-js/moment-js.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 
 <dom-module id="payment-row-item">
   <template>
@@ -74,18 +76,26 @@
         font-size: 14px;
         margin-top: 40px;
       }
+
+      .has-comment {
+        background-color: #f3f4f8;
+      }
     </style>
 
-    <div class="container">
+    <div class$="{{hasComment(paymentItem.comment)}}">
       <div class="row row-left">
-        <span class="title">my payment title</span>
-        <span class="category">gasoline</span>
-        <span class="payment-comment">comment:</span>
-        <span class="payment-small-text">my very simple comment for this payment here</span>
+        <span class="title">[[paymentItem.title]]</span>
+        <span class="category">[[paymentItem.category]]</span>
+        <template is="dom-if" if="{{paymentItem.comment}}">
+          <span class="payment-comment">comment:</span>
+          <span class="payment-small-text">[[paymentItem.comment]]</span>
+        </template>
       </div>
       <div class="row row-right">
-        <span class="payment-small-text">on Thursday, 15 April 2017</span>
-        <span class="payment-amount">-40.00</span>
+        <span class="payment-small-text">on
+          <moment-js date="{{paymentItem.date}}" date-format="YYYY-MM-DD" format="LLLL"></moment-js>
+        </span>
+        <span class="payment-amount">-[[amount]]</span>
         <span class="payment-currency">GEL</span>
       </div>
     </div>
@@ -93,17 +103,28 @@
 
   <script>
     class PaymentRowItem extends Polymer.Element {
-      static get is() { return 'payment-row-item'; }
+      static get is() { return 'payment-row-item' }
       static get properties() {
         return {
-          title: {
-            type: String,
-            value: ''
+          paymentItem: Object,
+          amount: {
+            type: Number,
+            computed: 'formatAmount(paymentItem.amount)'
           }
-        };
+        }
+      }
+
+      formatAmount(amount) {
+        return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
+      }
+
+      hasComment(comment) {
+        let classes = 'container'
+        if (comment) classes += ' has-comment'
+        return classes
       }
     }
 
-    window.customElements.define(PaymentRowItem.is, PaymentRowItem);
+    window.customElements.define(PaymentRowItem.is, PaymentRowItem)
   </script>
 </dom-module>

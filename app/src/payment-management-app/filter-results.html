@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
 
 <link rel="import" href="./payment-row-item.html">
 <link rel="import" href="./payment-charts.html">
@@ -71,11 +72,9 @@
       <div class="container">
         <div>
           <div class="payment-list">
-            <payment-row-item></payment-row-item>
-            <payment-row-item></payment-row-item>
-            <payment-row-item></payment-row-item>
-            <payment-row-item></payment-row-item>
-            <payment-row-item></payment-row-item>
+            <template is="dom-repeat" items="{{userPayments}}">
+              <payment-row-item payment-item="{{item}}"></payment-row-item>
+            </template>
           </div>
           <div class="payment-total">
             <span class="payment-total-title">Total:</span>
@@ -106,12 +105,10 @@
         }
       }
 
-      async ready() {
+      ready() {
         super.ready()
-        // setTimeout(() => {
         this.recordCount = this.userPayments.length
         console.log('==>>userPayments<<==', this.userPayments)
-        // }, 500);
       }
     }
 

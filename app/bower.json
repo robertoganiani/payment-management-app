@@ -3,7 +3,8 @@
   "main": "index.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "paper-toast": "PolymerElements/paper-toast#^2.1.0"
+    "paper-toast": "PolymerElements/paper-toast#^2.1.0",
+    "moment-js": "^0.7.2"
   },
   "devDependencies": {
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"

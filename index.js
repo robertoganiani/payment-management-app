@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const expressJWT = require('express-jwt')
 const path = require('path')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 require('./models/User')
 require('./models/Payment')
@@ -19,6 +20,8 @@ mongoose.connect(MONGO_URI)
 mongoose.connection
   .once('open', () => console.log('Connected to MongoLab'))
   .on('error', error => console.log('Error connecting to MongoLab: ', error))
+
+app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
