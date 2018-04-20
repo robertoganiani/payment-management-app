@@ -42,7 +42,7 @@
         <extended-filters></extended-filters>
       </template>
 
-      <filter-results user-payments="[[userPayments]]"></filter-results>
+      <filter-results user-payments="[[userPayments]]" total-amount="[[totalAmount]]"></filter-results>
       <div class="sticky-footer">
         <app-footer></app-footer>
       </div>
@@ -75,6 +75,11 @@
           newPayment: {
             type: Object,
             observer: 'pushNewPayment'
+          },
+          totalAmount: {
+            type: Number,
+            value: 0,
+            notify: true
           }
         }
       }
@@ -107,11 +112,19 @@
           .catch(error => console.error('Error:', error))
           .then(response => {
             this.set('userPayments', response.payments.reverse())
+            this.set('totalAmount', this.calcTotalAmount())
           })
+      }
+
+      calcTotalAmount() {
+        const amount = this.userPayments.map((a) => a.amount).reduce((a, b) => a + b)
+        return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
       }
 
       pushNewPayment(newValue, oldValue) {
         this.unshift('userPayments', newValue)
+        const tempAmount = parseFloat(this.totalAmount) + parseFloat(newValue.amount)
+        this.set('totalAmount', tempAmount.toFixed(2))
       }
     }
 

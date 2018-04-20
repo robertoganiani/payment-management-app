@@ -78,7 +78,7 @@
           </div>
           <div class="payment-total">
             <span class="payment-total-title">Total:</span>
-            <span class="payment-total-amount">83.60</span>
+            <span class="payment-total-amount">[[totalAmount]]</span>
           </div>
         </div>
         <div class="payment-charts">
@@ -97,6 +97,10 @@
             type: Array,
             value: [],
             observer: 'newData'
+          },
+          totalAmount: {
+            type: Number,
+            value: 0
           }
         }
       }
