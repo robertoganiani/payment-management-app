@@ -69,12 +69,13 @@
             type: Boolean,
             value: false,
             notify: true
-          }
+          },
+          userPayments: {
+            type: Array,
+            value: [],
+            notify: true
+          },
         }
-      }
-
-      constructor() {
-        super()
       }
 
       signin(e) {
@@ -98,9 +99,25 @@
               this.isLoggedIn = true
               this.$.username.value = ''
               this.$.password.value = ''
+              this.getPayments(username, response.token)
               return
             }
             this.$.toast.open()
+          })
+      }
+
+      getPayments(username, token) {
+        fetch(`http://localhost:8000/payments/${username}`, {
+          method: 'GET',
+          headers: new Headers({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          })
+        })
+          .then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            this.set('userPayments', response.payments.reverse())
           })
       }
     }

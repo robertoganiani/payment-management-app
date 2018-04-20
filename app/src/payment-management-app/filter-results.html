@@ -93,7 +93,17 @@
       static get is() { return 'filter-results' }
       static get properties() {
         return {
+          userPayments: {
+            type: Array,
+            value: [],
+            observer: 'newData'
+          }
         }
+      }
+
+      newData(newValue, oldValue) {
+        this.set('userPayments', newValue)
+        // console.log('==>>newValue, oldValue<<==', newValue, oldValue)
       }
     }
 

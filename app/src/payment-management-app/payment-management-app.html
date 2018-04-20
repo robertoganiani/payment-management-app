@@ -31,7 +31,7 @@
     </template>
 
     <template is="dom-if" if="{{!isLoggedIn}}">
-      <login-register is-logged-in="{{isLoggedIn}}"></login-register>
+      <login-register is-logged-in="{{isLoggedIn}}" user-payments="{{userPayments}}"></login-register>
     </template>
 
     <template is="dom-if" if="{{isLoggedIn}}">
@@ -92,10 +92,6 @@
         }
       }
 
-      pushNewPayment(newValue, oldValue) {
-        this.unshift('userPayments', newValue)
-      }
-
       getPayments() {
         const username = localStorage.getItem('username')
         const token = localStorage.getItem('token')
@@ -112,6 +108,10 @@
           .then(response => {
             this.set('userPayments', response.payments.reverse())
           })
+      }
+
+      pushNewPayment(newValue, oldValue) {
+        this.unshift('userPayments', newValue)
       }
     }
 
