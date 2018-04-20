@@ -54,6 +54,7 @@
       .title {
         font-size: 19px;
         color: var(--main-gray);
+        margin-right: 15px;
       }
 
       .payment-small-text {
@@ -93,7 +94,7 @@
       </div>
       <div class="row row-right">
         <span class="payment-small-text">on
-          <moment-js date="{{paymentItem.date}}" date-format="YYYY-MM-DD" format="LLLL"></moment-js>
+          <moment-js date="{{paymentItem.date}}" date-format="YYYY-MM-DD" format="LL"></moment-js>
         </span>
         <span class="payment-amount">-[[amount]]</span>
         <span class="payment-currency">GEL</span>

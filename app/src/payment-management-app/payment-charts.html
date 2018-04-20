@@ -5,36 +5,74 @@
     <style>
       .container {
         background-color: #f9fafb;
-        display: grid;
-        grid-auto-flow: column;
+        display: flex;
+        flex-direction: column;
+
         justify-content: space-between;
         box-sizing: border-box;
         padding: 20px 15px 20px 25px;
-        border-bottom: 1px solid #dee0e3;
-        height: 550px;
+
+        max-height: 550px;
       }
 
       @media only screen and (max-width: 665px) {}
     </style>
 
     <div class="container">
-      charts
+      <div id="permonth"></div>
+      <div id="percategory"></div>
     </div>
   </template>
 
   <script>
     class PaymentCharts extends Polymer.Element {
-      static get is() { return 'payment-charts'; }
+      static get is() { return 'payment-charts' }
       static get properties() {
         return {
           title: {
             type: String,
             value: ''
           }
-        };
+        }
+      }
+
+      connectedCallback() {
+        super.connectedCallback()
+
+        google.charts.load("current", { packages: ['corechart'] })
+        google.charts.setOnLoadCallback(this.drawChart.bind(this))
+      }
+
+      drawChart() {
+        const data = google.visualization.arrayToDataTable([
+          ['Month', 'Amount'],
+          ['2012', 900],
+          ['2013', 1000],
+          ['2014', 1170],
+          ['2015', 1250],
+          ['2016', 1530],
+          ['2012', 900],
+          ['2013', 1000],
+          ['2014', 1170],
+          ['2015', 1250],
+          ['2016', 1530]
+        ])
+
+        const view = new google.visualization.DataView(data)
+
+        const options = {
+          legend: { position: "none" },
+          backgroundColor: 'transparent',
+          colors: ['#a1c4ff']
+        }
+
+        const chart = new google.visualization.ColumnChart(this.$.permonth)
+        const chart2 = new google.visualization.ColumnChart(this.$.percategory)
+        chart.draw(view, options)
+        chart2.draw(view, options)
       }
     }
 
-    window.customElements.define(PaymentCharts.is, PaymentCharts);
+    window.customElements.define(PaymentCharts.is, PaymentCharts)
   </script>
 </dom-module>
