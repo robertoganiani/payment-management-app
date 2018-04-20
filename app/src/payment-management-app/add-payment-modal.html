@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="add-payment-modal">
   <template>
@@ -148,6 +149,7 @@
           <button on-click="addPayment" class="create-btn">CREATE</button>
         </div>
       </form>
+      <paper-toast id="toast" text="Fill out form please"></paper-toast>
     </div>
   </template>
 
@@ -178,6 +180,11 @@
         const category = this.$.category.value
         const date = this.$.date.value
         const comment = this.$.comment.value
+
+        if(!title || !amount || !category || !date) {
+          this.$.toast.open()
+          return
+        }
 
         const payment = { title, amount, category, date, comment }
         this.set('newPayment', payment)

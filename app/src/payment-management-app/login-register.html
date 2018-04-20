@@ -57,6 +57,7 @@
         </div>
       </form>
       <paper-toast id="toast" text="Wrong password"></paper-toast>
+      <paper-toast id="toast2" text="Username and password required"></paper-toast>
     </div>
   </template>
 
@@ -83,6 +84,11 @@
 
         const username = this.$.username.value
         const password = this.$.password.value
+
+        if (!username || !password) {
+          this.$.toast2.open()
+          return
+        }
 
         fetch('http://localhost:8000/signin', {
           method: 'POST',
