@@ -176,12 +176,12 @@
         const token = localStorage.getItem('token')
         const username = localStorage.getItem('username')
         const title = this.$.title.value
-        const amount = this.$.amount.value
+        const amount = Math.abs(this.$.amount.value)
         const category = this.$.category.value
         const date = this.$.date.value
         const comment = this.$.comment.value
 
-        if(!title || !amount || !category || !date) {
+        if (!title || !amount || !category || !date) {
           this.$.toast.open()
           return
         }
