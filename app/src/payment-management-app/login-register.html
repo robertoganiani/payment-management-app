@@ -56,8 +56,8 @@
           <button on-click="signin" class='btn signin-btn'>Log In / Sign Up</button>
         </div>
       </form>
-      <paper-toast id="toast" text="Wrong password"></paper-toast>
-      <paper-toast id="toast2" text="Username and password required"></paper-toast>
+      <paper-toast id="wrong" text="Wrong password"></paper-toast>
+      <paper-toast id="required" text="Username and password required"></paper-toast>
     </div>
   </template>
 
@@ -70,16 +70,6 @@
             type: Boolean,
             value: false,
             notify: true
-          },
-          userPayments: {
-            type: Array,
-            value: [],
-            notify: true
-          },
-          totalAmount: {
-            type: Number,
-            value: 0,
-            notify: true
           }
         }
       }
@@ -91,7 +81,7 @@
         const password = this.$.password.value
 
         if (!username || !password) {
-          this.$.toast2.open()
+          this.$.required.open()
           return
         }
 
@@ -107,35 +97,13 @@
             if (response.token) {
               localStorage.setItem('token', response.token)
               localStorage.setItem('username', username)
-              this.isLoggedIn = true
+              this.set('isLoggedIn', true)
               this.$.username.value = ''
               this.$.password.value = ''
-              this.getPayments(username, response.token)
               return
             }
-            this.$.toast.open()
+            this.$.wrong.open()
           })
-      }
-
-      getPayments(username, token) {
-        fetch(`http://localhost:8000/payments/${username}`, {
-          method: 'GET',
-          headers: new Headers({
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          })
-        })
-          .then(res => res.json())
-          .catch(error => console.error('Error:', error))
-          .then(response => {
-            this.set('userPayments', response.payments.reverse())
-            this.set('totalAmount', this.calcTotalAmount())
-          })
-      }
-
-      calcTotalAmount() {
-        const amount = this.userPayments.map((a) => a.amount).reduce((a, b) => a + b)
-        return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
       }
     }
 

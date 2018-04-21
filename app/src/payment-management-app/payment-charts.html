@@ -23,7 +23,7 @@
   </template>
 
   <script>
-    const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
     class PaymentCharts extends Polymer.Element {
       static get is() { return 'payment-charts' }
@@ -48,7 +48,7 @@
 
       updateCharts() {
         google.charts.load("current", { packages: ['corechart'] })
-        google.charts.setOnLoadCallback(this.drawChart.bind(this))
+        google.charts.setOnLoadCallback(this.drawCharts.bind(this))
       }
 
       updateData(newValue, oldValue) {
@@ -61,9 +61,7 @@
         this.updateCharts()
       }
 
-      generateByMonthChartData(data) {
-        const dataArr = Object.values(data)
-
+      generatePerMonthChartData(data) {
         const dataMap = {
           Month: ['Month', 'Amount'],
           Jan: ['Jan', 0],
@@ -80,7 +78,7 @@
           Dec: ['Dec', 0]
         }
 
-        for (const payment of dataArr) {
+        for (const payment of data) {
           const monthNumber = parseInt(payment.date.substring(5, 7))
           dataMap[MONTHS[monthNumber - 1]][1] += parseFloat(payment.amount)
         }
@@ -88,12 +86,32 @@
         return Object.values(dataMap)
       }
 
-      drawChart() {
-        const data = google.visualization.arrayToDataTable(this.generateByMonthChartData(this.userPayments))
+      generatePerCategoryChartData(data) {
+        const dataMap = {
+          Category: ['Category', 'Amount'],
+          'mobile service': ['mobile service', 0],
+          gasoline: ['gasoline', 0],
+          food: ['food', 0],
+          charity: ['charity', 0],
+          transport: ['transport', 0]
+        }
 
-        const view = new google.visualization.DataView(data)
+        for (const payment of data) {
+            dataMap[payment.category][1] += parseFloat(payment.amount)
+        }
 
-        const options = {
+        return Object.values(dataMap)
+      }
+
+      drawCharts() {
+        const arrData = Object.values(this.userPayments)
+        const dataPerMonth = google.visualization.arrayToDataTable(this.generatePerMonthChartData(arrData))
+        const dataPerCategory = google.visualization.arrayToDataTable(this.generatePerCategoryChartData(arrData))
+
+        const viewPerMonth = new google.visualization.DataView(dataPerMonth)
+        const viewPerCategory = new google.visualization.DataView(dataPerCategory)
+
+        const optionsPerMonth = {
           title: 'Payments per month',
           legend: { position: 'none' },
           backgroundColor: 'transparent',
@@ -101,10 +119,18 @@
           bar: { groupWidth: '85%' },
         }
 
-        const chart = new google.visualization.ColumnChart(this.$.permonth)
-        const chart2 = new google.visualization.ColumnChart(this.$.percategory)
-        chart.draw(view, options)
-        chart2.draw(view, options)
+        const optionsPerCategory = {
+          title: 'Payments per category',
+          legend: { position: 'none' },
+          backgroundColor: 'transparent',
+          colors: ['#a1c4ff'],
+          bar: { groupWidth: '85%' },
+        }
+
+        const chartPerMonth = new google.visualization.ColumnChart(this.$.permonth)
+        const chartPerCategory = new google.visualization.ColumnChart(this.$.percategory)
+        chartPerMonth.draw(viewPerMonth, optionsPerMonth)
+        chartPerCategory.draw(viewPerCategory, optionsPerCategory)
       }
     }
 

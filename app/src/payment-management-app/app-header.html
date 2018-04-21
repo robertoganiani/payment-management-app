@@ -103,7 +103,7 @@
       logout() {
         localStorage.removeItem('token')
         localStorage.removeItem('username')
-        this.isLoggedIn = false
+        this.set('isLoggedIn', false)
         location.reload()
       }
     }

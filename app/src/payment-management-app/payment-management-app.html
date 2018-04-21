@@ -26,23 +26,24 @@
       }
     </style>
 
-    <template is="dom-if" if="{{isModalVisible}}">
+    <template is="dom-if" if="[[isModalVisible]]">
       <add-payment-modal new-payment="{{newPayment}}" is-modal-visible="{{isModalVisible}}"></add-payment-modal>
     </template>
 
-    <template is="dom-if" if="{{!isLoggedIn}}">
+    <template is="dom-if" if="[[!isLoggedIn]]">
       <login-register is-logged-in="{{isLoggedIn}}" user-payments="{{userPayments}}" total-amount="{{totalAmount}}"></login-register>
     </template>
 
-    <template is="dom-if" if="{{isLoggedIn}}">
+    <template is="dom-if" if="[[isLoggedIn]]">
       <app-header is-logged-in="{{isLoggedIn}}"></app-header>
       <add-filter-payment is-modal-visible="{{isModalVisible}}" is-filters-visible="{{isFiltersVisible}}"></add-filter-payment>
 
-      <template is="dom-if" if="{{isFiltersVisible}}">
+      <template is="dom-if" if="[[isFiltersVisible]]">
         <extended-filters></extended-filters>
       </template>
 
       <filter-results new-payment="{{newPayment}}" user-payments="[[userPayments]]" total-amount="[[totalAmount]]"></filter-results>
+
       <div class="sticky-footer">
         <app-footer></app-footer>
       </div>
@@ -65,7 +66,8 @@
           },
           isLoggedIn: {
             type: Boolean,
-            value: false
+            value: false,
+            observer: 'onLoginChange'
           },
           userPayments: {
             type: Array,
@@ -88,9 +90,23 @@
         super.ready()
 
         if (localStorage.getItem('token')) {
-          this.isLoggedIn = true
+          this.set('isLoggedIn', true)
           this.getPayments()
         }
+      }
+
+      onLoginChange(newValue, oldValue) {
+        if (newValue) {
+          this.set('isLoggedIn', true)
+          this.getPayments()
+          return
+        }
+      }
+
+      pushNewPayment(newValue, oldValue) {
+        this.unshift('userPayments', newValue)
+        const tempAmount = parseFloat(this.totalAmount) + parseFloat(newValue.amount)
+        this.set('totalAmount', tempAmount.toFixed(2))
       }
 
       getPayments() {
@@ -113,14 +129,10 @@
       }
 
       calcTotalAmount() {
-        const amount = this.userPayments.map((a) => a.amount).reduce((a, b) => a + b)
-        return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
-      }
-
-      pushNewPayment(newValue, oldValue) {
-        this.unshift('userPayments', newValue)
-        const tempAmount = parseFloat(this.totalAmount) + parseFloat(newValue.amount)
-        this.set('totalAmount', tempAmount.toFixed(2))
+        if (this.userPayments.length) {
+          const amount = this.userPayments.map((a) => a.amount).reduce((a, b) => a + b)
+          return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
+        }
       }
     }
 

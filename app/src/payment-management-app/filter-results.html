@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 
 <link rel="import" href="./payment-row-item.html">
 <link rel="import" href="./payment-charts.html">
@@ -55,6 +56,15 @@
         overflow-y: scroll;
       }
 
+      .no-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 50px;
+        min-height: 500px;
+      }
+
       @media only screen and (max-width: 750px) {
         .wrapper {
           align-items: center;
@@ -64,28 +74,38 @@
           grid-template-rows: repeat(2, auto);
           grid-row-gap: 20px;
         }
+        .no-data {
+          min-height: 200px;
+        }
       }
     </style>
 
     <div class="wrapper">
       <span class="records-count">[[recordCount]] records found</span>
-      <div class="container">
-        <div>
-          <div class="payment-list">
-            <template is="dom-repeat" items="[[userPayments]]">
-              <payment-row-item payment-item="[[item]]"></payment-row-item>
-            </template>
+
+      <template is="dom-if" if="[[!userPayments.length]]">
+        <div class="no-data">No data for rendering</div>
+      </template>
+
+      <template is="dom-if" if="[[userPayments.length]]">
+        <div class="container">
+          <div>
+            <div class="payment-list">
+              <template is="dom-repeat" items="[[userPayments]]">
+                <payment-row-item payment-item="[[item]]"></payment-row-item>
+              </template>
+            </div>
+            <div class="payment-total">
+              <span class="payment-total-title">Total:</span>
+              <span class="payment-total-amount">[[totalAmount]]</span>
+            </div>
           </div>
-          <div class="payment-total">
-            <span class="payment-total-title">Total:</span>
-            <span class="payment-total-amount">[[totalAmount]]</span>
+          <div class="payment-charts">
+            <payment-charts new-payment="[[newPayment]]" user-payments="[[userPayments]]"></payment-charts>
           </div>
         </div>
-        <div class="payment-charts">
-          <payment-charts new-payment="[[newPayment]]" user-payments="[[userPayments]]"></payment-charts>
-        </div>
-      </div>
     </div>
+    </template>
   </template>
 
   <script>
@@ -105,8 +125,7 @@
           },
           newPayment: {
             type: Object,
-            observer: 'pushNewPayment',
-            // notify: true
+            observer: 'pushNewPayment'
           }
         }
       }
