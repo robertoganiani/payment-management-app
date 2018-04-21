@@ -31,7 +31,7 @@
     </template>
 
     <template is="dom-if" if="{{!isLoggedIn}}">
-      <login-register is-logged-in="{{isLoggedIn}}" user-payments="{{userPayments}}"></login-register>
+      <login-register is-logged-in="{{isLoggedIn}}" user-payments="{{userPayments}}" total-amount="{{totalAmount}}"></login-register>
     </template>
 
     <template is="dom-if" if="{{isLoggedIn}}">
@@ -42,7 +42,7 @@
         <extended-filters></extended-filters>
       </template>
 
-      <filter-results user-payments="[[userPayments]]" total-amount="[[totalAmount]]"></filter-results>
+      <filter-results new-payment="{{newPayment}}" user-payments="[[userPayments]]" total-amount="[[totalAmount]]"></filter-results>
       <div class="sticky-footer">
         <app-footer></app-footer>
       </div>
@@ -82,10 +82,6 @@
             notify: true
           }
         }
-      }
-
-      static get observedAttributes() {
-        return ['newPayment']
       }
 
       ready() {

@@ -72,8 +72,8 @@
       <div class="container">
         <div>
           <div class="payment-list">
-            <template is="dom-repeat" items="{{userPayments}}">
-              <payment-row-item payment-item="{{item}}"></payment-row-item>
+            <template is="dom-repeat" items="[[userPayments]]">
+              <payment-row-item payment-item="[[item]]"></payment-row-item>
             </template>
           </div>
           <div class="payment-total">
@@ -82,7 +82,7 @@
           </div>
         </div>
         <div class="payment-charts">
-          <payment-charts></payment-charts>
+          <payment-charts new-payment="[[newPayment]]" user-payments="[[userPayments]]"></payment-charts>
         </div>
       </div>
     </div>
@@ -96,13 +96,23 @@
           userPayments: {
             type: Array,
             value: [],
-            observer: 'newData'
+            observer: 'newData',
+            notify: true
           },
           totalAmount: {
             type: Number,
             value: 0
+          },
+          newPayment: {
+            type: Object,
+            observer: 'pushNewPayment',
+            // notify: true
           }
         }
+      }
+
+      pushNewPayment(newValue, oldValue) {
+        this.set('newPayment', newValue)
       }
 
       newData(newValue, oldValue) {

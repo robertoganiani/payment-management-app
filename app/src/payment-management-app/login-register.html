@@ -76,6 +76,11 @@
             value: [],
             notify: true
           },
+          totalAmount: {
+            type: Number,
+            value: 0,
+            notify: true
+          }
         }
       }
 
@@ -124,7 +129,13 @@
           .catch(error => console.error('Error:', error))
           .then(response => {
             this.set('userPayments', response.payments.reverse())
+            this.set('totalAmount', this.calcTotalAmount())
           })
+      }
+
+      calcTotalAmount() {
+        const amount = this.userPayments.map((a) => a.amount).reduce((a, b) => a + b)
+        return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
       }
     }
 
