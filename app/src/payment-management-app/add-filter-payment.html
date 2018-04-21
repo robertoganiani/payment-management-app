@@ -140,7 +140,7 @@
       <div class="right-content">
         <div class="filter-by">
           <img class="filter-icon" src="../../images/filter.png" alt="filter">
-          <input class="filter-input" type="text" placeholder="filter by title...">
+          <input on-change="setSubTitle" class="filter-input" type="text" placeholder="filter by title...">
         </div>
         <div class="extended-filters">
           <span on-click="showFilters" class="extended-filters-btn">extended filters</span>
@@ -163,6 +163,10 @@
             type: Boolean,
             value: false,
             notify: true
+          },
+          userFilters: {
+            type: Object,
+            notify: true
           }
         }
       }
@@ -173,6 +177,10 @@
 
       showFilters() {
         this.isFiltersVisible = !this.isFiltersVisible
+      }
+
+      setSubTitle(e) {
+        this.set('userFilters', Object.assign({}, this.userFilters, { subTitle: e.target.value }))
       }
     }
 

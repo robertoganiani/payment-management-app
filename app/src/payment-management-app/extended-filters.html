@@ -117,22 +117,23 @@
         <div class="filter-by-category">
           <p class="filter-title">filter by category</p>
           <div class="category-container">
-            <span class="category-item">mobile service</span>
-            <span class="category-item active-item">gasoline</span>
-            <span class="category-item">food</span>
-            <span class="category-item">charity</span>
-            <span class="category-item">transport</span>
+            <span on-click="setCategories" class="category-item">mobile service</span>
+            <span on-click="setCategories" class="category-item">gasoline</span>
+            <span on-click="setCategories" class="category-item">food</span>
+            <span on-click="setCategories" class="category-item">charity</span>
+            <span on-click="setCategories" class="category-item">transport</span>
           </div>
         </div>
         <div class="filter filter-by-date">
           <p class="filter-title">filter by date</p>
-          <input class="input" placeholder="from" type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
-          <input class="input" placeholder="to" type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
+          <input on-change="setDates" id="fromdate" class="input" placeholder="from" type="text" onfocus="(this.type='date')" onblur="(this.type='text')">
+          <input on-change="setDates" id="todate" id="todate" class="input" placeholder="to" type="text" onfocus="(this.type='date')"
+            onblur="(this.type='text')">
         </div>
         <div class="filter filter-by-amount">
           <p class="filter-title">filter by amount</p>
-          <input class="input" placeholder="from" type="number">
-          <input class="input" placeholder="to" type="number">
+          <input on-change="setAmounts" id="fromamount" class="input" placeholder="from" type="number">
+          <input on-change="setAmounts" id="toamount" class="input" placeholder="to" type="number">
         </div>
       </div>
     </div>
@@ -141,6 +142,35 @@
   <script>
     class ExtendedFilters extends Polymer.Element {
       static get is() { return 'extended-filters'; }
+      static get properties() {
+        return {
+          userFilters: {
+            type: Object,
+            notify: true
+          }
+        }
+      }
+
+      setCategories(e) {
+        const category = e.target.innerHTML
+        if (!this.userFilters.categories.includes(category)) {
+          e.target.setAttribute('class', 'active-item category-item')
+          this.set('userFilters', Object.assign({}, this.userFilters, { categories: [...this.userFilters.categories, category] }))
+        } else {
+          e.target.setAttribute('class', 'category-item')
+          const index = this.userFilters.categories.indexOf(category)
+          this.userFilters.categories.splice(index, 1)
+          this.set('userFilters', Object.assign({}, this.userFilters))
+        }
+      }
+
+      setDates(e) {
+        this.set('userFilters', Object.assign({}, this.userFilters, { dates: [this.$.fromdate.value, this.$.todate.value] }))
+      }
+
+      setAmounts(e) {
+        this.set('userFilters', Object.assign({}, this.userFilters, { amounts: [this.$.fromamount.value, this.$.toamount.value] }))
+      }
     }
 
     window.customElements.define(ExtendedFilters.is, ExtendedFilters);

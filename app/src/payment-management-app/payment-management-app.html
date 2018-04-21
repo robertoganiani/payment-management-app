@@ -36,10 +36,10 @@
 
     <template is="dom-if" if="[[isLoggedIn]]">
       <app-header is-logged-in="{{isLoggedIn}}"></app-header>
-      <add-filter-payment is-modal-visible="{{isModalVisible}}" is-filters-visible="{{isFiltersVisible}}"></add-filter-payment>
+      <add-filter-payment user-filters="{{filters}}" is-modal-visible="{{isModalVisible}}" is-filters-visible="{{isFiltersVisible}}"></add-filter-payment>
 
       <template is="dom-if" if="[[isFiltersVisible]]">
-        <extended-filters></extended-filters>
+        <extended-filters user-filters="{{filters}}"></extended-filters>
       </template>
 
       <filter-results new-payment="{{newPayment}}" user-payments="[[userPayments]]" total-amount="[[totalAmount]]"></filter-results>
@@ -82,6 +82,16 @@
             type: Number,
             value: 0,
             notify: true
+          },
+          filters: {
+            type: Object,
+            value: {
+              subTitle: '',
+              categories: [],
+              dates: {},
+              amounts: {}
+            },
+            observer: 'filtersChanged'
           }
         }
       }
@@ -93,6 +103,11 @@
           this.set('isLoggedIn', true)
           this.getPayments()
         }
+      }
+
+      filtersChanged(newValue, oldValue) {
+        // console.log('===>>userPayments<<===', this.userPayments)
+        console.log('===>>this.filters<<===', this.filters)
       }
 
       onLoginChange(newValue, oldValue) {
@@ -123,7 +138,7 @@
           .then(res => res.json())
           .catch(error => console.error('Error:', error))
           .then(response => {
-            this.set('userPayments', response.payments.reverse())
+            this.set('userPayments', response.payments.sort((a, b) => (b.date > a.date) ? 1 : ((a.date > b.date) ? -1 : 0)))
             this.set('totalAmount', this.calcTotalAmount())
           })
       }
