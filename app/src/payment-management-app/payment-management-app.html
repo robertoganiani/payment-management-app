@@ -117,7 +117,7 @@
 
         // filter by subtitle
         if (subTitle) {
-          filteredPayments = filteredPayments.filter(payment => payment.title.toLowerCase().includes(subTitle))
+          filteredPayments = filteredPayments.filter(payment => payment.title.toLowerCase().includes(subTitle.toLowerCase()))
         }
 
         // filter by categories

@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/moment-js/moment-js.html">
 <link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 
 <dom-module id="payment-row-item">
@@ -93,9 +92,7 @@
         </template>
       </div>
       <div class="row row-right">
-        <span class="payment-small-text">on
-          <moment-js date="{{paymentItem.date}}" date-format="YYYY-MM-DD" format="LL"></moment-js>
-        </span>
+        <span class="payment-small-text">on [[date]]</span>
         <span class="payment-amount">-[[amount]]</span>
         <span class="payment-currency">GEL</span>
       </div>
@@ -111,12 +108,20 @@
           amount: {
             type: Number,
             computed: 'formatAmount(paymentItem.amount)'
+          },
+          date: {
+            type: String,
+            computed: 'formatDate(paymentItem.date)'
           }
         }
       }
 
       formatAmount(amount) {
         return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
+      }
+
+      formatDate(date) {
+        return new Date(date).toString().substring(0, 15)
       }
 
       hasComment(comment) {
