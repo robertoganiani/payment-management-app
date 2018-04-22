@@ -1,0 +1,138 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="payment-charts">
+  <template>
+    <style>
+      .container {
+        background-color: #f9fafb;
+        display: flex;
+        flex-direction: column;
+
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 20px 15px 20px 25px;
+
+        max-height: 550px;
+      }
+    </style>
+
+    <div class="container">
+      <div id="permonth"></div>
+      <div id="percategory"></div>
+    </div>
+  </template>
+
+  <script>
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    class PaymentCharts extends Polymer.Element {
+      static get is() { return 'payment-charts' }
+      static get properties() {
+        return {
+          title: {
+            type: String,
+            value: ''
+          },
+          userPayments: {
+            type: Array,
+            value: [],
+            observer: 'updateData'
+          },
+
+          newPayment: {
+            type: Object,
+            observer: 'pushNewPayment'
+          }
+        }
+      }
+
+      updateCharts() {
+        google.charts.load("current", { packages: ['corechart'] })
+        google.charts.setOnLoadCallback(this.drawCharts.bind(this))
+      }
+
+      updateData(newValue, oldValue) {
+        this.set('userPayments', newValue)
+        this.updateCharts()
+      }
+
+      pushNewPayment(newValue, oldValue) {
+        this.updateCharts()
+      }
+
+      generatePerMonthChartData(data) {
+        const dataMap = {
+          Month: ['Month', 'Amount'],
+          Jan: ['Jan', 0],
+          Feb: ['Feb', 0],
+          Mar: ['Mar', 0],
+          Apr: ['Apr', 0],
+          May: ['May', 0],
+          Jun: ['Jun', 0],
+          Jul: ['Jul', 0],
+          Aug: ['Aug', 0],
+          Sep: ['Sep', 0],
+          Oct: ['Oct', 0],
+          Nov: ['Nov', 0],
+          Dec: ['Dec', 0]
+        }
+
+        for (const payment of data) {
+          const monthNumber = parseInt(payment.date.substring(5, 7))
+          dataMap[MONTHS[monthNumber - 1]][1] += parseFloat(payment.amount)
+        }
+
+        return Object.values(dataMap)
+      }
+
+      generatePerCategoryChartData(data) {
+        const dataMap = {
+          Category: ['Category', 'Amount'],
+          'mobile service': ['mobile service', 0],
+          gasoline: ['gasoline', 0],
+          food: ['food', 0],
+          charity: ['charity', 0],
+          transport: ['transport', 0]
+        }
+
+        for (const payment of data) {
+            dataMap[payment.category][1] += parseFloat(payment.amount)
+        }
+
+        return Object.values(dataMap)
+      }
+
+      drawCharts() {
+        const arrData = Object.values(this.userPayments)
+        const dataPerMonth = google.visualization.arrayToDataTable(this.generatePerMonthChartData(arrData))
+        const dataPerCategory = google.visualization.arrayToDataTable(this.generatePerCategoryChartData(arrData))
+
+        const viewPerMonth = new google.visualization.DataView(dataPerMonth)
+        const viewPerCategory = new google.visualization.DataView(dataPerCategory)
+
+        const optionsPerMonth = {
+          title: 'Payments per month',
+          legend: { position: 'none' },
+          backgroundColor: 'transparent',
+          colors: ['#a1c4ff'],
+          bar: { groupWidth: '85%' },
+        }
+
+        const optionsPerCategory = {
+          title: 'Payments per category',
+          legend: { position: 'none' },
+          backgroundColor: 'transparent',
+          colors: ['#a1c4ff'],
+          bar: { groupWidth: '85%' },
+        }
+
+        const chartPerMonth = new google.visualization.ColumnChart(this.$.permonth)
+        const chartPerCategory = new google.visualization.ColumnChart(this.$.percategory)
+        chartPerMonth.draw(viewPerMonth, optionsPerMonth)
+        chartPerCategory.draw(viewPerCategory, optionsPerCategory)
+      }
+    }
+
+    window.customElements.define(PaymentCharts.is, PaymentCharts)
+  </script>
+</dom-module>

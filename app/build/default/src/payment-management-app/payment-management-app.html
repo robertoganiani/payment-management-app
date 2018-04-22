@@ -1,10 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
 
 <link rel="import" href="./add-payment-modal.html">
 <link rel="import" href="./app-header.html">
 <link rel="import" href="./app-footer.html">
 <link rel="import" href="./add-filter-payment.html">
 <link rel="import" href="./extended-filters.html">
+<link rel="import" href="./filter-results.html">
+<link rel="import" href="./login-register.html">
 
 <dom-module id="payment-management-app">
   <template>
@@ -12,29 +15,185 @@
       :host {
         font-family: 'Open Sans', sans-serif;
         width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .sticky-footer {
+        flex-shrink: 0;
       }
     </style>
 
-    <!-- <add-payment-modal></add-payment-modal> -->
-    <app-header></app-header>
-    <add-filter-payment></add-filter-payment>
-    <extended-filters></extended-filters>
-    <app-footer></app-footer>
+    <template is="dom-if" if="[[isModalVisible]]">
+      <add-payment-modal new-payment="{{newPayment}}" is-modal-visible="{{isModalVisible}}"></add-payment-modal>
+    </template>
+
+    <template is="dom-if" if="[[!isLoggedIn]]">
+      <login-register is-logged-in="{{isLoggedIn}}"></login-register>
+    </template>
+
+    <template is="dom-if" if="[[isLoggedIn]]">
+      <app-header is-logged-in="{{isLoggedIn}}"></app-header>
+      <add-filter-payment user-filters="{{filters}}" is-modal-visible="{{isModalVisible}}" is-filters-visible="{{isFiltersVisible}}"></add-filter-payment>
+
+      <template is="dom-if" if="[[isFiltersVisible]]">
+        <extended-filters user-filters="{{filters}}"></extended-filters>
+      </template>
+
+      <filter-results new-payment="{{newPayment}}" user-payments="[[filteredPayments]]" total-amount="[[totalAmount]]"></filter-results>
+
+      <div class="sticky-footer">
+        <app-footer></app-footer>
+      </div>
+    </template>
+
   </template>
 
   <script>
     class PaymentManagementApp extends Polymer.Element {
-      static get is() { return 'payment-management-app'; }
+      static get is() { return 'payment-management-app' }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'payment-management-app'
+          isModalVisible: {
+            type: Boolean,
+            value: false
+          },
+          isFiltersVisible: {
+            type: Boolean,
+            value: false
+          },
+          isLoggedIn: {
+            type: Boolean,
+            value: false,
+            observer: 'onLoginChange'
+          },
+          userPayments: {
+            type: Array,
+            value: [],
+            notify: true
+          },
+          filteredPayments: {
+            type: Array,
+            value: [],
+            notify: true
+          },
+          newPayment: {
+            type: Object,
+            observer: 'pushNewPayment'
+          },
+          totalAmount: {
+            type: Number,
+            value: 0,
+            notify: true
+          },
+          filters: {
+            type: Object,
+            value: {
+              subTitle: '',
+              categories: [],
+              dates: [],
+              amounts: []
+            },
+            observer: 'filtersChanged'
           }
-        };
+        }
+      }
+
+      ready() {
+        super.ready()
+
+        if (localStorage.getItem('token')) {
+          this.set('isLoggedIn', true)
+          this.getPayments()
+        }
+      }
+
+      filtersChanged(newValue, oldValue) {
+        let filteredPayments = this.userPayments
+
+        const { subTitle, categories, dates, amounts } = this.filters
+
+        // filter by subtitle
+        if (subTitle) {
+          filteredPayments = filteredPayments.filter(payment => payment.title.toLowerCase().includes(subTitle))
+        }
+
+        // filter by categories
+        if (categories.length) {
+          filteredPayments = filteredPayments.filter(payment => categories.includes(payment.category))
+        }
+
+        // filter by dates
+        if (dates.length) {
+          if (dates[0]) {
+            filteredPayments = filteredPayments.filter(payment => payment.date >= dates[0])
+          }
+
+          if (dates[1]) {
+            filteredPayments = filteredPayments.filter(payment => payment.date <= dates[1])
+          }
+        }
+
+        // filter by amounts
+        if (amounts.length) {
+          if (amounts[0]) {
+            filteredPayments = filteredPayments.filter(payment => payment.amount >= amounts[0])
+          }
+
+          if (amounts[1]) {
+            filteredPayments = filteredPayments.filter(payment => payment.amount <= amounts[1])
+          }
+        }
+
+        this.set('filteredPayments', [...filteredPayments])
+        this.set('totalAmount', this.calcTotalAmount(filteredPayments))
+      }
+
+      onLoginChange(newValue, oldValue) {
+        if (newValue) {
+          this.set('isLoggedIn', true)
+          this.getPayments()
+          return
+        }
+      }
+
+      pushNewPayment(newValue, oldValue) {
+        this.unshift('userPayments', newValue)
+        const tempAmount = parseFloat(this.totalAmount) + parseFloat(newValue.amount)
+        this.set('totalAmount', tempAmount.toFixed(2))
+        this.filtersChanged()
+      }
+
+      getPayments() {
+        const username = localStorage.getItem('username')
+        const token = localStorage.getItem('token')
+
+        fetch(`http://localhost:8000/payments/${username}`, {
+          method: 'GET',
+          headers: new Headers({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          })
+        })
+          .then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            this.set('userPayments', response.payments.sort((a, b) => (b.date > a.date) ? 1 : ((a.date > b.date) ? -1 : 0)))
+            this.set('filteredPayments', this.userPayments)
+            this.set('totalAmount', this.calcTotalAmount(this.userPayments) || 0)
+          })
+      }
+
+      calcTotalAmount(payments) {
+        if (payments.length) {
+          const amount = payments.map((a) => a.amount).reduce((a, b) => a + b)
+          return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
+        }
       }
     }
 
-    window.customElements.define(PaymentManagementApp.is, PaymentManagementApp);
+    window.customElements.define(PaymentManagementApp.is, PaymentManagementApp)
   </script>
 </dom-module>

@@ -1,11 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <dom-module id="add-payment-modal">
   <template>
     <style>
       :host {
         --blue-color: #a1c4ff;
-        --white-color: #fff;
+        --white-color: #f9fafb;
       }
 
       .container {
@@ -15,7 +16,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: 100;
+        z-index: 1000;
         display: flex;
         justify-content: center;
       }
@@ -108,7 +109,7 @@
       <form class="payment-form">
         <div class="modal-header">
           <span class="modal-title">ADD NEW PAYMENT</span>
-          <span class="close-btn">X</span>
+          <span on-click="hideModal" class="close-btn">X</span>
         </div>
         <div class="modal-body">
           <div class="double-input input-container">
@@ -145,25 +146,73 @@
             <br>
             <textarea required="" id="comment" cols="40" rows="10"></textarea>
           </div>
-          <button class="create-btn">CREATE</button>
+          <button on-click="addPayment" class="create-btn">CREATE</button>
         </div>
       </form>
+      <paper-toast id="toast" text="Only comment is not required field"></paper-toast>
     </div>
   </template>
 
   <script>
     class AddPaymentModal extends Polymer.Element {
-      static get is() { return 'add-payment-modal'; }
+      static get is() { return 'add-payment-modal' }
       static get properties() {
         return {
-          title: {
-            type: String,
-            value: ''
+          isModalVisible: {
+            type: Boolean,
+            value: true,
+            notify: true
+          },
+          newPayment: {
+            type: Object,
+            notify: true
           }
-        };
+        }
+      }
+
+      addPayment(e) {
+        e.preventDefault()
+
+        const token = localStorage.getItem('token')
+        const username = localStorage.getItem('username')
+        const title = this.$.title.value
+        const amount = Math.abs(this.$.amount.value)
+        const category = this.$.category.value
+        const date = this.$.date.value
+        const comment = this.$.comment.value
+
+        if (!title || !amount || !category || !date) {
+          this.$.toast.open()
+          return
+        }
+
+        const payment = { title, amount, category, date, comment }
+        this.set('newPayment', payment)
+
+        fetch('http://localhost:8000/add-payment', {
+          method: 'POST',
+          body: JSON.stringify({ username, payment }),
+          headers: new Headers({
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          })
+        }).then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            this.$.title.value = ''
+            this.$.amount.value = ''
+            this.$.category.value = ''
+            this.$.date.value = ''
+            this.$.comment.value = ''
+            this.isModalVisible = false
+          })
+      }
+
+      hideModal() {
+        this.isModalVisible = false
       }
     }
 
-    window.customElements.define(AddPaymentModal.is, AddPaymentModal);
+    window.customElements.define(AddPaymentModal.is, AddPaymentModal)
   </script>
 </dom-module>

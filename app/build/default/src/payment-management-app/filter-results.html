@@ -1,0 +1,152 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+
+<link rel="import" href="./payment-row-item.html">
+<link rel="import" href="./payment-charts.html">
+
+<dom-module id="filter-results">
+  <template>
+    <style>
+      .wrapper {
+        max-width: 1170px;
+        margin: 20px auto 0 auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        background-color: transparent;
+        min-height: 100px;
+        max-width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-columns: 1.3fr 1fr;
+        grid-column-gap: 20px;
+        justify-content: space-between;
+      }
+
+      .records-count {
+        font-size: 26px;
+        color: #4e6985;
+        margin-bottom: 15px;
+      }
+
+      .payment-total {
+        height: 75px;
+        background-color: #a1c4ff;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        padding-right: 20px;
+        color: #fff;
+      }
+
+      .payment-total-title {
+        font-size: 13px;
+      }
+
+      .payment-total-amount {
+        font-size: 27px;
+      }
+
+      .payment-list {
+        max-height: 550px;
+        overflow-y: scroll;
+      }
+
+      .no-data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 50px;
+        min-height: 500px;
+      }
+
+      @media only screen and (max-width: 750px) {
+        .wrapper {
+          align-items: center;
+        }
+        .container {
+          grid-template-columns: auto;
+          grid-template-rows: repeat(2, auto);
+          grid-row-gap: 20px;
+        }
+        .no-data {
+          min-height: 200px;
+        }
+      }
+    </style>
+
+    <div class="wrapper">
+      <span class="records-count">[[recordCount]] records found</span>
+
+      <template is="dom-if" if="[[!userPayments.length]]">
+        <div class="no-data">No data for rendering</div>
+      </template>
+
+      <template is="dom-if" if="[[userPayments.length]]">
+        <div class="container">
+          <div>
+            <div class="payment-list">
+              <template is="dom-repeat" items="[[userPayments]]">
+                <payment-row-item payment-item="[[item]]"></payment-row-item>
+              </template>
+            </div>
+            <div class="payment-total">
+              <span class="payment-total-title">Total:</span>
+              <span class="payment-total-amount">[[totalAmount]]</span>
+            </div>
+          </div>
+          <div class="payment-charts">
+            <payment-charts new-payment="[[newPayment]]" user-payments="[[userPayments]]"></payment-charts>
+          </div>
+        </div>
+    
+    </template>
+  </div></template>
+
+  <script>
+    class FilterResults extends Polymer.Element {
+      static get is() { return 'filter-results' }
+      static get properties() {
+        return {
+          userPayments: {
+            type: Array,
+            value: [],
+            observer: 'newData',
+            notify: true
+          },
+          totalAmount: {
+            type: Number,
+            value: 0
+          },
+          newPayment: {
+            type: Object,
+            observer: 'pushNewPayment'
+          },
+          recordCount: {
+            type: Number,
+            computed: 'calcRecordCount(userPayments)'
+          }
+        }
+      }
+
+      pushNewPayment(newValue, oldValue) {
+        this.set('newPayment', newValue)
+      }
+
+      newData(newValue, oldValue) {
+        this.set('userPayments', newValue)
+      }
+
+      calcRecordCount() {
+        return this.userPayments.length
+      }
+    }
+
+    window.customElements.define(FilterResults.is, FilterResults)
+  </script>
+</dom-module>

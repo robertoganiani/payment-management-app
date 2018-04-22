@@ -4,7 +4,7 @@
   <template>
     <style>
       .container {
-        background-color: #fff;
+        background-color: #f9fafb;
         min-height: 85px;
         max-width: 1170px;
         margin: 85px auto 5px auto;
@@ -15,7 +15,7 @@
       }
 
       .add-payment {
-        min-width: 170px;
+        padding-right: 25px;
         height: 65px;
         box-sizing: border-box;
         display: flex;
@@ -39,7 +39,6 @@
 
       .filter-by {
         box-sizing: border-box;
-        width: 220px;
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -52,6 +51,7 @@
         border: none;
         font-size: 13px;
         width: 160px;
+        background-color: #f9fafb;
       }
 
       .filter-input:focus,
@@ -69,7 +69,7 @@
 
       .extended-filters {
         box-sizing: border-box;
-        width: 170px;
+        padding-left: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -81,7 +81,7 @@
         border: none;
         font-size: 13px;
         width: 130px;
-        min-width: 90px;
+        min-width: 105px;
         height: 30px;
         border-radius: 20px;
         cursor: pointer;
@@ -113,26 +113,37 @@
           flex: 1;
           width: auto;
           padding-left: 10px;
-          padding-right: 10px;
         }
         .right-content {
           width: auto;
+        }
+      }
+
+      @media only screen and (max-width: 360px) {
+        .extended-filters {
+          padding-left: 2px;
+        }
+        .extended-filters-btn {
+          width: 105px;
+        }
+        .filter-icon {
+          padding-left: 10px;
         }
       }
     </style>
 
     <div class="container">
       <div class="add-payment">
-        <img class="add-payment-icon" src="../../images/add.png" alt="add payment">
+        <img on-click="showModal" class="add-payment-icon" src="../../images/add.png" alt="add payment">
         <span>ADD PAYMENT</span>
       </div>
       <div class="right-content">
         <div class="filter-by">
           <img class="filter-icon" src="../../images/filter.png" alt="filter">
-          <input class="filter-input" type="text" placeholder="filter by any property...">
+          <input on-change="setSubTitle" class="filter-input" type="text" placeholder="filter by title...">
         </div>
         <div class="extended-filters">
-          <span class="extended-filters-btn">extended filters</span>
+          <span on-click="showFilters" class="extended-filters-btn">extended filters</span>
         </div>
       </div>
     </div>
@@ -141,6 +152,36 @@
   <script>
     class AddFilterPayment extends Polymer.Element {
       static get is() { return 'add-filter-payment'; }
+      static get properties() {
+        return {
+          isModalVisible: {
+            type: Boolean,
+            value: false,
+            notify: true
+          },
+          isFiltersVisible: {
+            type: Boolean,
+            value: false,
+            notify: true
+          },
+          userFilters: {
+            type: Object,
+            notify: true
+          }
+        }
+      }
+
+      showModal() {
+        this.isModalVisible = true
+      }
+
+      showFilters() {
+        this.isFiltersVisible = !this.isFiltersVisible
+      }
+
+      setSubTitle(e) {
+        this.set('userFilters', Object.assign({}, this.userFilters, { subTitle: e.target.value }))
+      }
     }
 
     window.customElements.define(AddFilterPayment.is, AddFilterPayment);

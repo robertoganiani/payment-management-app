@@ -1,0 +1,112 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<dom-module id="login-register">
+  <template>
+    <style>
+      :host {
+        --main-blue: #a1c4ff;
+      }
+
+      .container {
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        height: 100vh;
+        font-size: 60px;
+        color: #888;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      input {
+        border: 0;
+        border-bottom: 3px solid var(--main-blue);
+        max-width: 250px;
+        height: 35px;
+        font-size: 25px;
+        border-radius: 3px;
+      }
+
+      input::placeholder {
+        padding: 0 15px;
+        color: #dee0e3;
+      }
+
+      .btn {
+        margin-top: 50px;
+        border: 0;
+        padding: 15px;
+        border-radius: 3px;
+      }
+
+      .signin-btn {
+        background: var(--main-blue);
+        color: #fff;
+        font-size: 15px;
+      }
+    </style>
+
+    <div class="container">
+      Login / Signup
+      <form>
+        <input required="" type="text" id="username" placeholder="Username">
+        <input required="" type="password" id="password" placeholder="Password">
+        <div class="btns">
+          <button on-click="signin" class="btn signin-btn">Log In / Sign Up</button>
+        </div>
+      </form>
+      <paper-toast id="wrong" text="Wrong password"></paper-toast>
+      <paper-toast id="required" text="Username and password required"></paper-toast>
+    </div>
+  </template>
+
+  <script>
+    class LoginRegister extends Polymer.Element {
+      static get is() { return 'login-register'; }
+      static get properties() {
+        return {
+          isLoggedIn: {
+            type: Boolean,
+            value: false,
+            notify: true
+          }
+        }
+      }
+
+      signin(e) {
+        e.preventDefault()
+
+        const username = this.$.username.value
+        const password = this.$.password.value
+
+        if (!username || !password) {
+          this.$.required.open()
+          return
+        }
+
+        fetch('http://localhost:8000/signin', {
+          method: 'POST',
+          body: JSON.stringify({ username, password }),
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          })
+        }).then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            if (response.token) {
+              localStorage.setItem('token', response.token)
+              localStorage.setItem('username', username)
+              this.set('isLoggedIn', true)
+              this.$.username.value = ''
+              this.$.password.value = ''
+              return
+            }
+            this.$.wrong.open()
+          })
+      }
+    }
+
+    window.customElements.define(LoginRegister.is, LoginRegister);
+  </script>
+</dom-module>

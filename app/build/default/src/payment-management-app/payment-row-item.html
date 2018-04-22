@@ -1,0 +1,131 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/moment-js/moment-js.html">
+<link rel="import" href="../../bower_components/polymer/lib/elements/dom-if.html">
+
+<dom-module id="payment-row-item">
+  <template>
+    <style>
+      :host {
+        --main-blue: #a1c4ff;
+        --main-white: #f9fafb;
+        --main-red: #f85776;
+        --main-gray: #4e6985;
+        --with-comment: #f3f4f8;
+        --small-font: 13px;
+      }
+
+      .container {
+        background-color: var(--main-white);
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+        padding: 20px 15px 20px 25px;
+        border-bottom: 1px solid #dee0e3;
+      }
+
+      .category {
+        color: var(--main-blue);
+        border: 1px solid var(--main-blue);
+        height: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+        padding: 10px 10px;
+        font-size: var(--small-font);
+        margin-top: 10px;
+      }
+
+      .row {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .row-left {
+        align-items: flex-start;
+      }
+
+      .row-right {
+        align-items: flex-end;
+        text-align: end;
+      }
+
+      .title {
+        font-size: 19px;
+        color: var(--main-gray);
+        margin-right: 15px;
+      }
+
+      .payment-small-text {
+        color: #aaaaaa;
+        font-size: var(--small-font);
+      }
+
+      .payment-amount {
+        font-size: 22px;
+        color: var(--main-red);
+      }
+
+      .payment-currency {
+        font-size: var(--small-font);
+        color: var(--main-red);
+      }
+
+      .payment-comment {
+        color: var(--main-gray);
+        font-size: 14px;
+        margin-top: 40px;
+      }
+
+      .has-comment {
+        background-color: #f3f4f8;
+      }
+    </style>
+
+    <div class$="{{hasComment(paymentItem.comment)}}">
+      <div class="row row-left">
+        <span class="title">[[paymentItem.title]]</span>
+        <span class="category">[[paymentItem.category]]</span>
+        <template is="dom-if" if="{{paymentItem.comment}}">
+          <span class="payment-comment">comment:</span>
+          <span class="payment-small-text">[[paymentItem.comment]]</span>
+        </template>
+      </div>
+      <div class="row row-right">
+        <span class="payment-small-text">on
+          <moment-js date="{{paymentItem.date}}" date-format="YYYY-MM-DD" format="LL"></moment-js>
+        </span>
+        <span class="payment-amount">-[[amount]]</span>
+        <span class="payment-currency">GEL</span>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class PaymentRowItem extends Polymer.Element {
+      static get is() { return 'payment-row-item' }
+      static get properties() {
+        return {
+          paymentItem: Object,
+          amount: {
+            type: Number,
+            computed: 'formatAmount(paymentItem.amount)'
+          }
+        }
+      }
+
+      formatAmount(amount) {
+        return parseFloat(Math.round(amount * 100) / 100).toFixed(2)
+      }
+
+      hasComment(comment) {
+        let classes = 'container'
+        if (comment) classes += ' has-comment'
+        return classes
+      }
+    }
+
+    window.customElements.define(PaymentRowItem.is, PaymentRowItem)
+  </script>
+</dom-module>
