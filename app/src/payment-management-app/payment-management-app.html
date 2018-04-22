@@ -170,7 +170,7 @@
         const username = localStorage.getItem('username')
         const token = localStorage.getItem('token')
 
-        fetch(`https://payment-management-app.herokuapp.com/${username}`, {
+        fetch(`https://payment-management-app.herokuapp.com/payments/${username}`, {
           method: 'GET',
           headers: new Headers({
             'Authorization': `Bearer ${token}`,
