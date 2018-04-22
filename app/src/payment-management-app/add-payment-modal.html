@@ -189,7 +189,7 @@
         const payment = { title, amount, category, date, comment }
         this.set('newPayment', payment)
 
-        fetch('http://localhost:8000/add-payment', {
+        fetch('https://payment-management-app.herokuapp.com/add-payment', {
           method: 'POST',
           body: JSON.stringify({ username, payment }),
           headers: new Headers({
