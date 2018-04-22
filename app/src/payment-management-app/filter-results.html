@@ -126,6 +126,10 @@
           newPayment: {
             type: Object,
             observer: 'pushNewPayment'
+          },
+          recordCount: {
+            type: Number,
+            computed: 'calcRecordCount(userPayments)'
           }
         }
       }
@@ -136,6 +140,10 @@
 
       newData(newValue, oldValue) {
         this.set('userPayments', newValue)
+      }
+
+      calcRecordCount() {
+        return this.userPayments.length
       }
     }
 
